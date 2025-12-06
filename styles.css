@@ -736,21 +736,101 @@ header h1 {
         padding: 10px;
     }
 
+    header {
+        padding: 20px;
+    }
+
     header h1 {
-        font-size: 2rem;
+        font-size: 1.8rem;
+        margin-bottom: 5px;
+    }
+
+    .date-display {
+        font-size: 0.95rem;
     }
 
     .tab-btn {
-        padding: 14px;
+        padding: 12px;
         font-size: 0.9rem;
     }
 
     .tab-content {
-        padding: 20px;
+        padding: 15px;
     }
 
     .prayer-grid {
         grid-template-columns: 1fr;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .prayer-card {
+        padding: 12px 15px;
+        border-radius: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .prayer-card:hover {
+        transform: none;
+    }
+
+    .prayer-header {
+        margin-bottom: 0;
+        flex: 1;
+    }
+
+    .prayer-header h3 {
+        font-size: 1.1rem;
+        margin-bottom: 2px;
+    }
+
+    .prayer-time {
+        font-size: 0.8rem;
+    }
+
+    .prayer-btn {
+        padding: 8px 16px;
+        font-size: 0.85rem;
+        width: auto;
+        flex-shrink: 0;
+        white-space: nowrap;
+    }
+
+    .prayer-btn .text {
+        display: none;
+    }
+
+    .prayer-btn .checkmark {
+        display: inline;
+        font-size: 1.1rem;
+    }
+
+    .prayer-card.completed .prayer-btn::after {
+        content: 'Done';
+        margin-left: 4px;
+        font-size: 0.85rem;
+    }
+
+    .today-summary {
+        padding: 15px;
+        border-radius: 10px;
+    }
+
+    .today-summary h3 {
+        font-size: 1.1rem;
+        margin-bottom: 12px;
+    }
+
+    .progress-bar {
+        height: 25px;
+        margin-bottom: 8px;
+    }
+
+    .progress-text {
+        font-size: 0.95rem;
     }
 
     .stat-value {
