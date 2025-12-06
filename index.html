@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prayer Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🕌 Prayer Tracker</h1>
+            <p class="date-display" id="currentDate"></p>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab-btn active" data-tab="today">Today</button>
+            <button class="tab-btn" data-tab="history">History</button>
+            <button class="tab-btn" data-tab="stats">Statistics</button>
+        </nav>
+
+        <!-- Today Section -->
+        <section id="today" class="tab-content active">
+            <div class="prayer-grid">
+                <div class="prayer-card" data-prayer="fajr">
+                    <div class="prayer-header">
+                        <h3>Fajr</h3>
+                        <span class="prayer-time">Dawn</span>
+                    </div>
+                    <button class="prayer-btn" data-prayer="fajr">
+                        <span class="checkmark">✓</span>
+                        <span class="text">Mark Complete</span>
+                    </button>
+                </div>
+
+                <div class="prayer-card" data-prayer="dhuhr">
+                    <div class="prayer-header">
+                        <h3>Dhuhr</h3>
+                        <span class="prayer-time">Noon</span>
+                    </div>
+                    <button class="prayer-btn" data-prayer="dhuhr">
+                        <span class="checkmark">✓</span>
+                        <span class="text">Mark Complete</span>
+                    </button>
+                </div>
+
+                <div class="prayer-card" data-prayer="asr">
+                    <div class="prayer-header">
+                        <h3>Asr</h3>
+                        <span class="prayer-time">Afternoon</span>
+                    </div>
+                    <button class="prayer-btn" data-prayer="asr">
+                        <span class="checkmark">✓</span>
+                        <span class="text">Mark Complete</span>
+                    </button>
+                </div>
+
+                <div class="prayer-card" data-prayer="maghrib">
+                    <div class="prayer-header">
+                        <h3>Maghrib</h3>
+                        <span class="prayer-time">Sunset</span>
+                    </div>
+                    <button class="prayer-btn" data-prayer="maghrib">
+                        <span class="checkmark">✓</span>
+                        <span class="text">Mark Complete</span>
+                    </button>
+                </div>
+
+                <div class="prayer-card" data-prayer="isha">
+                    <div class="prayer-header">
+                        <h3>Isha</h3>
+                        <span class="prayer-time">Night</span>
+                    </div>
+                    <button class="prayer-btn" data-prayer="isha">
+                        <span class="checkmark">✓</span>
+                        <span class="text">Mark Complete</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="today-summary">
+                <h3>Today's Progress</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="todayProgress"></div>
+                </div>
+                <p class="progress-text" id="progressText">0 of 5 prayers completed</p>
+            </div>
+        </section>
+
+        <!-- History Section -->
+        <section id="history" class="tab-content">
+            <div class="history-controls">
+                <button id="addRecord" class="btn-primary">+ Add Record</button>
+                <select id="monthFilter" class="filter-select">
+                    <option value="">All Months</option>
+                    <option value="01">January</option>
+                    <option value="02">February</option>
+                    <option value="03">March</option>
+                    <option value="04">April</option>
+                    <option value="05">May</option>
+                    <option value="06">June</option>
+                    <option value="07">July</option>
+                    <option value="08">August</option>
+                    <option value="09">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+                <select id="yearFilter" class="filter-select">
+                    <option value="">All Years</option>
+                </select>
+                <button id="clearFilter" class="btn-secondary">Clear Filters</button>
+            </div>
+            <div id="historyList" class="history-list">
+                <!-- History items will be populated here -->
+            </div>
+        </section>
+
+        <!-- Statistics Section -->
+        <section id="stats" class="tab-content">
+            <div class="stats-grid">
+                <!-- Streak Card -->
+                <div class="stat-card highlight">
+                    <h3>Current Streak</h3>
+                    <div class="stat-value" id="currentStreak">0</div>
+                    <p class="stat-label">consecutive days</p>
+                    <p class="stat-subtext">Longest: <span id="longestStreak">0</span> days</p>
+                </div>
+
+                <!-- Completion Rate Card -->
+                <div class="stat-card">
+                    <h3>Overall Completion</h3>
+                    <div class="stat-value" id="overallRate">0%</div>
+                    <p class="stat-label">all time</p>
+                </div>
+
+                <!-- This Week Card -->
+                <div class="stat-card">
+                    <h3>This Week</h3>
+                    <div class="stat-value" id="weekRate">0%</div>
+                    <p class="stat-label">completion rate</p>
+                </div>
+
+                <!-- This Month Card -->
+                <div class="stat-card">
+                    <h3>This Month</h3>
+                    <div class="stat-value" id="monthRate">0%</div>
+                    <p class="stat-label">completion rate</p>
+                </div>
+            </div>
+
+            <!-- Prayer Timing Analysis -->
+            <div class="prayer-analysis">
+                <h3>Prayer Analysis</h3>
+                <div class="prayer-bars" id="prayerBars">
+                    <!-- Prayer bars will be populated here -->
+                </div>
+            </div>
+
+            <!-- Calendar View -->
+            <div class="calendar-section">
+                <div class="calendar-header">
+                    <button id="prevMonth" class="btn-icon">←</button>
+                    <h3 id="calendarMonth">Month Year</h3>
+                    <button id="nextMonth" class="btn-icon">→</button>
+                </div>
+                <div class="calendar" id="calendar">
+                    <!-- Calendar will be populated here -->
+                </div>
+                <div class="calendar-legend">
+                    <span><span class="legend-box perfect"></span> All prayers</span>
+                    <span><span class="legend-box partial"></span> Some prayers</span>
+                    <span><span class="legend-box none"></span> No prayers</span>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Edit Prayer Record</h3>
+                <button class="modal-close" id="closeModal">×</button>
+            </div>
+            <div class="modal-body">
+                <div id="datePickerContainer" style="display: none; margin-bottom: 20px;">
+                    <label for="modalDatePicker" style="display: block; margin-bottom: 8px; font-weight: 600;">Select Date:</label>
+                    <input type="date" id="modalDatePicker" class="date-input" style="width: 100%;">
+                </div>
+                <p class="modal-date" id="modalDate"></p>
+                <div class="modal-prayers" id="modalPrayers">
+                    <!-- Checkboxes will be populated here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="saveEdit" class="btn-primary">Save Changes</button>
+                <button id="cancelEdit" class="btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
