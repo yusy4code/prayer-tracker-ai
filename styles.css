@@ -561,7 +561,14 @@ header h1 {
     font-weight: 700;
 }
 
-.calendar-day:not(.header):not(.empty):hover {
+.calendar-day.future {
+    background: var(--border-color);
+    color: var(--text-secondary);
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.calendar-day:not(.header):not(.empty):not(.future):hover {
     transform: scale(1.1);
 }
 

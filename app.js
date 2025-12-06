@@ -64,7 +64,11 @@ async function getAllPrayerRecords() {
 
 // Date helper functions
 function getDateString(date = new Date()) {
-    return date.toISOString().split('T')[0];
+    // Use local timezone instead of GMT
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
 }
 
 function formatDate(dateString) {
@@ -82,6 +86,11 @@ function getDaysDifference(date1, date2) {
     const d2 = new Date(date2 + 'T00:00:00');
     const diffTime = Math.abs(d2 - d1);
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+}
+
+function isFutureDate(dateString) {
+    const today = getDateString();
+    return dateString > today;
 }
 
 // Tab navigation
@@ -220,6 +229,17 @@ async function loadHistory(filterMonth = null, filterYear = null) {
 }
 
 async function toggleHistoryPrayer(date, prayer, isChecked) {
+    // Prevent editing future dates
+    if (isFutureDate(date)) {
+        alert('Cannot edit prayers for future dates');
+        // Revert the checkbox
+        const checkbox = document.getElementById(`history-${date}-${prayer}`);
+        if (checkbox) {
+            checkbox.checked = !isChecked;
+        }
+        return;
+    }
+
     const record = await getPrayerRecord(date);
     let completedPrayers = record ? record.prayers : [];
 
@@ -302,6 +322,12 @@ function initHistoryControls() {
 
 // Edit modal functionality
 async function openEditModal(date) {
+    // Prevent editing future dates
+    if (isFutureDate(date)) {
+        alert('Cannot edit prayers for future dates');
+        return;
+    }
+
     currentEditDate = date;
     const modal = document.getElementById('editModal');
     const modalTitle = document.getElementById('modalTitle');
@@ -580,6 +606,7 @@ function renderCalendar(records) {
     for (let day = 1; day <= daysInMonth; day++) {
         const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         const prayerCount = recordsMap[dateStr] || 0;
+        const isFuture = isFutureDate(dateStr);
 
         let className = 'calendar-day';
         if (prayerCount === 5) className += ' perfect';
@@ -588,8 +615,11 @@ function renderCalendar(records) {
         else className += ' no-data';
 
         if (dateStr === today) className += ' today';
+        if (isFuture) className += ' future';
 
-        calendarHTML += `<div class="${className}" onclick="openEditModal('${dateStr}')">${day}</div>`;
+        // Only allow clicking on past and present dates
+        const onclickAttr = isFuture ? '' : `onclick="openEditModal('${dateStr}')"`;
+        calendarHTML += `<div class="${className}" ${onclickAttr}>${day}</div>`;
     }
 
     calendar.innerHTML = calendarHTML;
