@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prayer Tracker</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <div class="container">
         <header>
@@ -119,6 +121,25 @@
         <!-- Statistics Section -->
         <section id="stats" class="tab-content">
             <div class="stats-grid">
+
+                <!-- Calendar View -->
+                <div class="calendar-section">
+                    <div class="calendar-header">
+                        <button id="prevMonth" class="btn-icon">←</button>
+                        <h3 id="calendarMonth">Month Year</h3>
+                        <button id="nextMonth" class="btn-icon">→</button>
+                    </div>
+                    <div class="calendar" id="calendar">
+                        <!-- Calendar will be populated here -->
+                    </div>
+                    <div class="calendar-legend">
+                        <span><span class="legend-box perfect"></span> All prayers</span>
+                        <span><span class="legend-box partial"></span> Some prayers</span>
+                        <span><span class="legend-box none"></span> No prayers</span>
+                    </div>
+                </div>
+
+
                 <!-- Streak Card -->
                 <div class="stat-card highlight">
                     <h3>Current Streak</h3>
@@ -157,22 +178,6 @@
                 </div>
             </div>
 
-            <!-- Calendar View -->
-            <div class="calendar-section">
-                <div class="calendar-header">
-                    <button id="prevMonth" class="btn-icon">←</button>
-                    <h3 id="calendarMonth">Month Year</h3>
-                    <button id="nextMonth" class="btn-icon">→</button>
-                </div>
-                <div class="calendar" id="calendar">
-                    <!-- Calendar will be populated here -->
-                </div>
-                <div class="calendar-legend">
-                    <span><span class="legend-box perfect"></span> All prayers</span>
-                    <span><span class="legend-box partial"></span> Some prayers</span>
-                    <span><span class="legend-box none"></span> No prayers</span>
-                </div>
-            </div>
         </section>
     </div>
 
@@ -185,7 +190,8 @@
             </div>
             <div class="modal-body">
                 <div id="datePickerContainer" style="display: none; margin-bottom: 20px;">
-                    <label for="modalDatePicker" style="display: block; margin-bottom: 8px; font-weight: 600;">Select Date:</label>
+                    <label for="modalDatePicker" style="display: block; margin-bottom: 8px; font-weight: 600;">Select
+                        Date:</label>
                     <input type="date" id="modalDatePicker" class="date-input" style="width: 100%;">
                 </div>
                 <p class="modal-date" id="modalDate"></p>

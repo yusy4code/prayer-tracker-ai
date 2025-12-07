@@ -200,29 +200,37 @@ async function loadHistory(filterMonth = null, filterYear = null) {
         return;
     }
 
-    historyList.innerHTML = filteredRecords.map(record => {
-        const completed = record.prayers;
-
-        return `
-            <div class="history-item">
-                <div class="history-date">${record.date}</div>
-                <div class="history-prayers-checkboxes">
-                    ${PRAYERS.map(prayer => `
-                        <div class="prayer-checkbox-item">
-                            <input
-                                type="checkbox"
-                                ${completed.includes(prayer) ? 'checked' : ''}
-                                class="prayer-checkbox"
-                                id="history-${record.date}-${prayer}"
-                                onchange="toggleHistoryPrayer('${record.date}', '${prayer}', this.checked)"
-                            >
-                            <label for="history-${record.date}-${prayer}">${capitalize(prayer)}</label>
-                        </div>
-                    `).join('')}
-                </div>
-            </div>
-        `;
-    }).join('');
+    historyList.innerHTML = `
+        <table class="history-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    ${PRAYERS.map(prayer => `<th>${capitalize(prayer)}</th>`).join('')}
+                </tr>
+            </thead>
+            <tbody>
+                ${filteredRecords.map(record => {
+                    const completed = record.prayers;
+                    return `
+                        <tr>
+                            <td class="history-date">${record.date}</td>
+                            ${PRAYERS.map(prayer => `
+                                <td class="prayer-cell">
+                                    <input
+                                        type="checkbox"
+                                        ${completed.includes(prayer) ? 'checked' : ''}
+                                        class="prayer-checkbox"
+                                        id="history-${record.date}-${prayer}"
+                                        onchange="toggleHistoryPrayer('${record.date}', '${prayer}', this.checked)"
+                                    >
+                                </td>
+                            `).join('')}
+                        </tr>
+                    `;
+                }).join('')}
+            </tbody>
+        </table>
+    `;
 }
 
 async function toggleHistoryPrayer(date, prayer, isChecked) {
