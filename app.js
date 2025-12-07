@@ -205,7 +205,7 @@ async function loadHistory(filterMonth = null, filterYear = null) {
 
         return `
             <div class="history-item">
-                <div class="history-date">${formatDate(record.date)}</div>
+                <div class="history-date">${record.date}</div>
                 <div class="history-prayers-checkboxes">
                     ${PRAYERS.map(prayer => `
                         <div class="prayer-checkbox-item">
@@ -219,9 +219,6 @@ async function loadHistory(filterMonth = null, filterYear = null) {
                             <label for="history-${record.date}-${prayer}">${capitalize(prayer)}</label>
                         </div>
                     `).join('')}
-                </div>
-                <div class="history-actions">
-                    <button class="btn-icon" onclick="openEditModal('${record.date}')">Edit</button>
                 </div>
             </div>
         `;
