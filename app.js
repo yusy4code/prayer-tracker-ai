@@ -169,7 +169,7 @@ function updateTodayProgress(count) {
 }
 
 // History functionality
-async function loadHistory(filterMonth = null, filterYear = null) {
+async function loadHistory(filterMonth = null, filterYear = null, showPendingOnly = false) {
     const historyList = document.getElementById('historyList');
     const records = await getAllPrayerRecords();
 
@@ -185,6 +185,11 @@ async function loadHistory(filterMonth = null, filterYear = null) {
             const matchesYear = !filterYear || year === filterYear;
             return matchesMonth && matchesYear;
         });
+    }
+
+    // Filter by pending prayers (prayers with less than 5 completed)
+    if (showPendingOnly) {
+        filteredRecords = filteredRecords.filter(r => r.prayers.length < 5);
     }
 
     // Populate year filter with available years
@@ -210,8 +215,8 @@ async function loadHistory(filterMonth = null, filterYear = null) {
             </thead>
             <tbody>
                 ${filteredRecords.map(record => {
-                    const completed = record.prayers;
-                    return `
+        const completed = record.prayers;
+        return `
                         <tr>
                             <td class="history-date">${record.date}</td>
                             ${PRAYERS.map(prayer => `
@@ -227,7 +232,7 @@ async function loadHistory(filterMonth = null, filterYear = null) {
                             `).join('')}
                         </tr>
                     `;
-                }).join('')}
+    }).join('')}
             </tbody>
         </table>
     `;
@@ -301,6 +306,8 @@ function initHistoryControls() {
     const monthFilter = document.getElementById('monthFilter');
     const yearFilter = document.getElementById('yearFilter');
     const clearFilter = document.getElementById('clearFilter');
+    const pendingFilterBtn = document.getElementById('pendingFilter');
+    let showPendingOnly = false;
 
     addRecordBtn.addEventListener('click', () => {
         openAddModal();
@@ -309,18 +316,30 @@ function initHistoryControls() {
     monthFilter.addEventListener('change', () => {
         const month = monthFilter.value;
         const year = yearFilter.value;
-        loadHistory(month, year);
+        loadHistory(month, year, showPendingOnly);
     });
 
     yearFilter.addEventListener('change', () => {
         const month = monthFilter.value;
         const year = yearFilter.value;
-        loadHistory(month, year);
+        loadHistory(month, year, showPendingOnly);
+    });
+
+    pendingFilterBtn.addEventListener('click', () => {
+        showPendingOnly = !showPendingOnly;
+        pendingFilterBtn.classList.toggle('active');
+        pendingFilterBtn.textContent = showPendingOnly ? 'Show All' : 'Show Pending';
+        const month = monthFilter.value;
+        const year = yearFilter.value;
+        loadHistory(month, year, showPendingOnly);
     });
 
     clearFilter.addEventListener('click', () => {
         monthFilter.value = '';
         yearFilter.value = '';
+        showPendingOnly = false;
+        pendingFilterBtn.classList.remove('active');
+        pendingFilterBtn.textContent = 'Show Pending';
         loadHistory();
     });
 }
@@ -580,7 +599,7 @@ function renderCalendar(records) {
 
     // Update month display
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-                       'July', 'August', 'September', 'October', 'November', 'December'];
+        'July', 'August', 'September', 'October', 'November', 'December'];
     document.getElementById('calendarMonth').textContent = `${monthNames[month]} ${year}`;
 
     // Get first day of month and number of days

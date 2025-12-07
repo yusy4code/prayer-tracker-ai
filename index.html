@@ -111,6 +111,7 @@
                 <select id="yearFilter" class="filter-select">
                     <option value="">All Years</option>
                 </select>
+                <button id="pendingFilter" class="btn-toggle">Show Pending</button>
                 <button id="clearFilter" class="btn-secondary">Clear Filters</button>
             </div>
             <div id="historyList" class="history-list">
@@ -120,8 +121,7 @@
 
         <!-- Statistics Section -->
         <section id="stats" class="tab-content">
-            <div class="stats-grid">
-
+            <div class="stats-layout">
                 <!-- Calendar View -->
                 <div class="calendar-section">
                     <div class="calendar-header">
@@ -139,34 +139,35 @@
                     </div>
                 </div>
 
+                <div class="stats-grid">
+                    <!-- Streak Card -->
+                    <div class="stat-card highlight">
+                        <h3>Current Streak</h3>
+                        <div class="stat-value" id="currentStreak">0</div>
+                        <p class="stat-label">consecutive days</p>
+                        <p class="stat-subtext">Longest: <span id="longestStreak">0</span> days</p>
+                    </div>
 
-                <!-- Streak Card -->
-                <div class="stat-card highlight">
-                    <h3>Current Streak</h3>
-                    <div class="stat-value" id="currentStreak">0</div>
-                    <p class="stat-label">consecutive days</p>
-                    <p class="stat-subtext">Longest: <span id="longestStreak">0</span> days</p>
-                </div>
+                    <!-- Completion Rate Card -->
+                    <div class="stat-card">
+                        <h3>Overall Completion</h3>
+                        <div class="stat-value" id="overallRate">0%</div>
+                        <p class="stat-label">all time</p>
+                    </div>
 
-                <!-- Completion Rate Card -->
-                <div class="stat-card">
-                    <h3>Overall Completion</h3>
-                    <div class="stat-value" id="overallRate">0%</div>
-                    <p class="stat-label">all time</p>
-                </div>
+                    <!-- This Week Card -->
+                    <div class="stat-card">
+                        <h3>This Week</h3>
+                        <div class="stat-value" id="weekRate">0%</div>
+                        <p class="stat-label">completion rate</p>
+                    </div>
 
-                <!-- This Week Card -->
-                <div class="stat-card">
-                    <h3>This Week</h3>
-                    <div class="stat-value" id="weekRate">0%</div>
-                    <p class="stat-label">completion rate</p>
-                </div>
-
-                <!-- This Month Card -->
-                <div class="stat-card">
-                    <h3>This Month</h3>
-                    <div class="stat-value" id="monthRate">0%</div>
-                    <p class="stat-label">completion rate</p>
+                    <!-- This Month Card -->
+                    <div class="stat-card">
+                        <h3>This Month</h3>
+                        <div class="stat-value" id="monthRate">0%</div>
+                        <p class="stat-label">completion rate</p>
+                    </div>
                 </div>
             </div>
 
@@ -208,4 +209,5 @@
 
     <script src="app.js"></script>
 </body>
+
 </html>
