@@ -514,50 +514,45 @@ function calculatePeriodRate(records, days) {
 function calculateStreaks(records) {
     if (records.length === 0) return { current: 0, longest: 0 };
 
-    // Sort by date ascending
-    const sorted = [...records].sort((a, b) => a.date.localeCompare(b.date));
-
-    let currentStreak = 0;
-    let longestStreak = 0;
-    let tempStreak = 0;
     const today = getDateString();
 
-    // Check if we have a current streak
-    const latestDate = sorted[sorted.length - 1].date;
-    const daysSinceLatest = getDaysDifference(latestDate, today);
+    // Exclude today if all 5 prayers aren't done yet — it's still in progress
+    const streakRecords = records.filter(r => r.date !== today || r.prayers.length === 5);
 
-    for (let i = sorted.length - 1; i >= 0; i--) {
-        const record = sorted[i];
-        const nextRecord = sorted[i + 1];
+    if (streakRecords.length === 0) return { current: 0, longest: 0 };
 
-        // A day counts towards streak if at least 3 prayers were completed
-        if (record.prayers.length >= 3) {
+    // Sort by date ascending (oldest → newest)
+    const sorted = [...streakRecords].sort((a, b) => a.date.localeCompare(b.date));
+
+    // Forward pass: correctly attributes each day to its own streak group
+    let longestStreak = 0;
+    let tempStreak = 0;
+    for (let i = 0; i < sorted.length; i++) {
+        const prev = sorted[i - 1];
+        if (prev && getDaysDifference(prev.date, sorted[i].date) > 1) {
+            tempStreak = 0; // gap breaks the streak
+        }
+        if (sorted[i].prayers.length === 5) {
             tempStreak++;
-
-            if (i === sorted.length - 1 && daysSinceLatest <= 1) {
-                currentStreak = tempStreak;
-            }
-
             longestStreak = Math.max(longestStreak, tempStreak);
         } else {
             tempStreak = 0;
-            if (i === sorted.length - 1) {
-                currentStreak = 0;
-            }
-        }
-
-        // Check for gaps
-        if (nextRecord) {
-            const dayDiff = getDaysDifference(record.date, nextRecord.date);
-            if (dayDiff > 1) {
-                tempStreak = 0;
-            }
         }
     }
 
-    // Reset current streak if latest record is too old
-    if (daysSinceLatest > 1) {
-        currentStreak = 0;
+    // Backward pass: walk back from the latest record to find the current streak
+    let currentStreak = 0;
+    const latestDate = sorted[sorted.length - 1].date;
+    const daysSinceLatest = getDaysDifference(latestDate, today);
+
+    if (daysSinceLatest <= 1) {
+        for (let i = sorted.length - 1; i >= 0; i--) {
+            const record = sorted[i];
+            const nextRecord = sorted[i + 1];
+            if (record.prayers.length !== 5) break;
+            if (nextRecord && getDaysDifference(record.date, nextRecord.date) > 1) break;
+            currentStreak++;
+        }
     }
 
     return { current: currentStreak, longest: longestStreak };
@@ -670,10 +665,20 @@ function capitalize(str) {
 window.openEditModal = openEditModal;
 window.toggleHistoryPrayer = toggleHistoryPrayer;
 
+// Ensure today has a record so the stats calendar always renders
+async function ensureTodayRecord() {
+    const today = getDateString();
+    const existing = await getPrayerRecord(today);
+    if (!existing) {
+        await savePrayerRecord(today, []);
+    }
+}
+
 // Initialize app
 async function init() {
     try {
         await initDB();
+        await ensureTodayRecord();
         initTabs();
         initHistoryControls();
         initModal();
